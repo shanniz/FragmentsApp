@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity
         implements FragmentMain.FragmentMainListener{
@@ -27,15 +28,29 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addFragment(View view) {
-        //
-        Fragment fragment = new FragmentDetail();
-        //fragment.setArguments(getIntent().getExtras());
-
         FragmentManager fragmentManager= getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.detailFragmentContainer,
-                new FragmentDetail()).commit();
 
+        Bundle bundle = new Bundle();
+        bundle.putString("data",
+                ((EditText)findViewById(R.id.editTextData)).getText().toString()
+        );
+
+        FragmentDetail fragmentDetail = new FragmentDetail();
+        fragmentDetail.setArguments(bundle);
+        fragmentTransaction.add(R.id.detailFragmentContainer,
+                fragmentDetail
+        ).commit();
+    }
+    public void removeFagment(View view) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment =
+                fragmentManager.findFragmentById(R.id.detailFragmentContainer);
+        if (fragment != null) {
+            FragmentTransaction fragmentTransaction =
+                    fragmentManager.beginTransaction();
+            fragmentTransaction.remove(fragment).commit();
+        }
     }
 
     @Override
@@ -51,22 +66,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void removeFagment(View view) {
-        FragmentManager fragmentManager =
-                getSupportFragmentManager();
-        Fragment fragment =
-                fragmentManager.findFragmentById(
-                        R.id.detailFragmentContainer);
 
-        if (fragment == null){
-            return;
-        }
-        FragmentTransaction fragmentTransaction =
-                fragmentManager.beginTransaction();
-        fragmentTransaction.remove(fragment );
-        fragmentTransaction.commit();
-
-    }
 
     @Override
     public void onDataSent(String input) {

@@ -29,6 +29,9 @@ public class FragmentDetail extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view =  inflater.inflate(R.layout.detail_fragment, container, false);
         mEditText = view.findViewById(R.id.editTextDetail);
+
+        mEditText.setText( this.getArguments().getString("data") );
+
         return view;
     }
 
